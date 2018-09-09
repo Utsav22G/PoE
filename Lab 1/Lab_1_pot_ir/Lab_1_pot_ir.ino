@@ -1,3 +1,6 @@
+/*  Uses IR distance sensor to detect proximity of an object and light the
+ LED according to the scaled analog output during configVal < 51.  */
+
 const int redLED = 11;
 const int yellowLED = 10;
 const int greenLED = 9;
@@ -21,7 +24,7 @@ void loop() {
   configVal = map(configVal, 0, 1023, 0, 255);  // Scale analog input to 0-255
 
   if (configVal < 51) {
-    // Turn all LEDs ON
+    // Turn all LEDs ON according to proximity
     analogWrite(redLED, brightVal);
     analogWrite(yellowLED, brightVal);
     analogWrite(greenLED, brightVal);

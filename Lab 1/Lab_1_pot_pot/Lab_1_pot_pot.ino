@@ -1,3 +1,6 @@
+/*  Uses potentiometer to light the LEDs according to the
+ scaled analog output during configVal < 51.  */
+
 const int redLED = 11;
 const int yellowLED = 10;
 const int greenLED = 9;
@@ -32,10 +35,10 @@ void loop() {
 
   if (configVal < 51) {
     // Turn all LEDs ON
-    if (brightVal > 51) {   // brightness
+    if (brightVal > 51) {   //  all ON, full brightness
       brightFunc(brightVal, redLED, yellowLED, greenLED);
     }
-    else {
+    else {    //  all ON, brightness depends on potentiometer resistance
       digitalWrite(redLED, HIGH);
       digitalWrite(yellowLED, HIGH);
       digitalWrite(greenLED, HIGH);
