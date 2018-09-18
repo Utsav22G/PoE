@@ -4,51 +4,59 @@
 #define SENSOR A0
 
 //  define hobby servos
-#define PAN 6
-#define TILT 3
+#define PAN 3
+#define TILT 6
 
 float sensorValue, inches, cm;    //Must be of type float for pow()
 
 Servo pan_servo;
 Servo tilt_servo;
 
-int pos = 0;
-
+int pan_pos = 0;
+int tilt_pos = 0;
+int pan_init = 0;
+int tilt_init = 0;
+int sense = 0;
 void setup() {
   analogReference(DEFAULT);
-  Serial.begin(9600);
-
+  Serial.begin(9600);  
   pan_servo.attach(PAN);
   tilt_servo.attach(TILT);
+
+  pan_init = 93-45;
+  pan_pos = pan_init;
+  pan_servo.write(pan_init);
+
+  tilt_init = 93-45;
+  tilt_pos = tilt_init;
+  tilt_servo.write(tilt_init);
 }
 
 void loop() {
-  // put your main code here, to run repeatedly:
-  int sense = analogRead(SENSOR);
-//  Serial.println(sense);
+  if (pan_pos <= pan_init + 90){
+    pan_pos += 5;
+    pan_servo.write(pan_pos);
+    delay(500);
 
-  Serial.println(sense);
-  delay(100);
+    for(tilt_pos = tilt_init+5; tilt_pos <= tilt_init +90; tilt_pos += 5){
+      tilt_servo.write(tilt_pos);
+      delay(500);
+      sense = analogRead(SENSOR);
+      cm = 118.68 * pow(0.9966, sense);
+      Serial.print("r:");
+      Serial.println(cm);
+      Serial.print("psi:");
+      Serial.println(pan_pos);
+      Serial.print("theta:");
+      Serial.println(tilt_pos);
+      delay(100);
+    }
 
-
-// for (pos = 0; pos <= 180; pos += 1) { // goes from 0 degrees to 180 degrees
-// // in steps of 1 degree
-//   pan_servo.write(pos);              // tell servo to go to position in variable 'pos'
-//   delay(15);                       // waits 15ms for the servo to reach the position
-// }
-// for (pos = 180; pos >= 0; pos -= 1) { // goes from 180 degrees to 0 degrees
-//   pan_servo.write(pos);              // tell servo to go to position in variable 'pos'
-//   delay(15);                       // waits 15ms for the servo to reach the position
-// }
-//
-// for (pos = 0; pos <= 180; pos += 1) { // goes from 0 degrees to 180 degrees
-//   // in steps of 1 degree
-//   tilt_servo.write(pos);              // tell servo to go to position in variable 'pos'
-//   delay(15);                       // waits 15ms for the servo to reach the position
-// }
-// for (pos = 180; pos >= 0; pos -= 1) { // goes from 180 degrees to 0 degrees
-//   tilt_servo.write(pos);              // tell servo to go to position in variable 'pos'
-//   delay(15);                       // waits 15ms for the servo to reach the position
-// }
+  }
+  else{
+    pan_servo.write(pan_init);
+  }
+  tilt_servo.write(tilt_init);
+  delay(500);
 
 }
