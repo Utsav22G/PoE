@@ -33,21 +33,21 @@ void setup() {
 }
 
 void loop() {
-  if (pan_pos <= pan_init + 90){
+  if (pan_pos <= pan_init + 75){
     pan_pos += 5;
     pan_servo.write(pan_pos);
     delay(500);
 
-    for(tilt_pos = tilt_init+5; tilt_pos <= tilt_init +90; tilt_pos += 5){
+    for(tilt_pos = tilt_init+5; tilt_pos <= tilt_init +75; tilt_pos += 5){
       tilt_servo.write(tilt_pos);
       delay(500);
       sense = analogRead(SENSOR);
       cm = 118.68 * pow(0.9966, sense);
-      Serial.print("r:");
-      Serial.println(cm);
-      Serial.print("psi:");
-      Serial.println(pan_pos);
-      Serial.print("theta:");
+     
+      Serial.print(cm);
+      Serial.print(",");
+      Serial.print(pan_pos);
+      Serial.print(",");
       Serial.println(tilt_pos);
       delay(100);
     }
@@ -55,6 +55,7 @@ void loop() {
   }
   else{
     pan_servo.write(pan_init);
+    Serial.print('END');
   }
   tilt_servo.write(tilt_init);
   delay(500);
