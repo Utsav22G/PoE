@@ -63,13 +63,10 @@ while True:
   # data from an "array of bytes", to a string
   #
     lineOfData = serialPort.readline().decode()
-    
+
     if 'END' in lineOfData:
         break
-        
-    print(lineOfData)
     data = lineOfData.split(',')
-    print(data)
     if len(data) ==3:
         r.append(float(data[0]))
         psi.append(int(data[1]))
@@ -78,29 +75,7 @@ while True:
   #
   # check if data was received
   #
-print(r)
-
-
-import math as m
-
-
-for i in range(len(theta)):
-    theta[i] = theta[i]*2*m.pi/180
-    psi[i] = psi[i]*2*m.pi/180
-
-x = []
-y = []
-z = []
-
-for i in range(len(r)):
-    x.append(r[i]*m.sin(psi[i])*m.cos(theta[i]))
-    y.append(r[i]*m.sin(psi[i])*m.sin(theta[i])) 
-    z.append(r[i]*m.cos(psi[i]))
-
-from mpl_toolkits import mplot3d
-import matplotlib.pyplot as plt
-
-fig = plt.figure()
-ax = plt.axes(projection = '3d')
-
-ax.scatter3D(x, y, z, 'gray')
+spherical = open('data/sphere_coords.txt')
+spherical.write(str(r) + '\n')
+spherical.write(str(psi) + '\n')
+spherical.write(str(theta) + '\n')
