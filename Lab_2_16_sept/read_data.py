@@ -5,7 +5,7 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 import ast
 
-file_name = 'data/sphere_coords_H_better.txt'
+file_name = 'data/sphere_coords_A.txt'
 file = open(file_name, mode='r')
 
 r = ast.literal_eval(file.readline())
@@ -28,9 +28,9 @@ for i in range(len(r)):
         z.append(r[i]*m.cos(theta[i]))
 
 fig = plt.figure()
-ax = plt.axes(projection = '3d')
-ax.xlabel('X-axis')
-ax.ylabel('Y-axis')
-ax.zlabel('Z-axis')
-ax.scatter3D(x, y, z)
+ax = fig.gca(projection = '3d')
+ax.set_xlabel('X-axis (in cm)')
+ax.set_ylabel('Y-axis (in cm)')
+ax.set_zlabel('Z-axis (in cm)')
+ax.scatter3D(x, y, z, label='Scatterplot of H, 35cm away')
 plt.show()

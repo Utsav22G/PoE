@@ -83,7 +83,7 @@ while True:
   #
   # check if data was received
   #
-spherical = open('data/sphere_coords.txt', 'w')
+spherical = open('data/sphere_coords_A.txt', 'w')
 spherical.write(str(r) + '\n')
 spherical.write(str(psi) + '\n')
 spherical.write(str(theta) + '\n')
