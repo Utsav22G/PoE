@@ -1,4 +1,4 @@
-#include<Servo.h>
+#include <Servo.h>
 
 //  define sensor pin
 #define SENSOR A0
@@ -16,10 +16,12 @@ int pan_pos = 0;
 int tilt_pos = 0;
 int pan_init = 0;
 int tilt_init = 0;
+int done = 0;
 int sense = 0;
+
 void setup() {
   analogReference(DEFAULT);
-  Serial.begin(9600);  
+  Serial.begin(115200);
   pan_servo.attach(PAN);
   tilt_servo.attach(TILT);
 
@@ -43,19 +45,30 @@ void loop() {
       delay(500);
       sense = analogRead(SENSOR);
       cm = 118.68 * pow(0.9966, sense);
-     
+
       Serial.print(cm);
       Serial.print(",");
       Serial.print(pan_pos);
       Serial.print(",");
-      Serial.println(tilt_pos);
+      Serial.print(tilt_pos);
+      Serial.print(",");
+      Serial.println(done);
       delay(100);
     }
 
   }
-  else{
+  else if (done == 0) {
+    done = 1;
+    Serial.print(cm);
+    Serial.print(",");
+    Serial.print(pan_pos);
+    Serial.print(",");
+    Serial.print(tilt_pos);
+    Serial.print(",");
+    Serial.println(done);
+    delay(100);
     pan_servo.write(pan_init);
-    Serial.print('END');
+    Serial.print("END");
   }
   tilt_servo.write(tilt_init);
   delay(500);

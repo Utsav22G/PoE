@@ -31,7 +31,9 @@ import serial
 # For Windows computers, the name is formatted like: "COM6"
 # For Apple computers, the name is formatted like: "/dev/tty.usbmodemfa141"
 #
-arduinoComPort = "COM3"
+
+arduinoComPort = '/dev/ttyACM0'
+# arduinoComPort = "COM3"
 
 
 #
@@ -40,7 +42,7 @@ arduinoComPort = "COM3"
 # NOTE2: For faster communication, set the baudRate to 115200 below
 #        and check that the arduino sketch you are using is updated as well.
 #
-baudRate = 9600
+baudRate = 115200
 
 
 #
@@ -63,19 +65,25 @@ while True:
   # data from an "array of bytes", to a string
   #
     lineOfData = serialPort.readline().decode()
+    print(lineOfData)
 
-    if 'END' in lineOfData:
-        break
     data = lineOfData.split(',')
-    if len(data) ==3:
+
+    if len(data) == 4:
         r.append(float(data[0]))
         psi.append(int(data[1]))
         theta.append(int(data[2]))
+        if(int(data[3]) == 1):
+            break
+
+    #
+    # elif (len(data) == 1) and (float(data[0]) == 0) and (len(r)>5):
+    #     break
 
   #
   # check if data was received
   #
-spherical = open('data/sphere_coords.txt')
+spherical = open('data/sphere_coords.txt', 'w')
 spherical.write(str(r) + '\n')
 spherical.write(str(psi) + '\n')
 spherical.write(str(theta) + '\n')
