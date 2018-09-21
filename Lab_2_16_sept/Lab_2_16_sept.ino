@@ -38,11 +38,11 @@ void loop() {
   if (pan_pos <= pan_init + 50){
     pan_pos += 1;
     pan_servo.write(pan_pos);
-    delay(200);
+    delay(100);
 
     for(tilt_pos = tilt_init+1; tilt_pos <= tilt_init +45; tilt_pos += 1){
       tilt_servo.write(tilt_pos);
-      delay(200);
+      delay(100);
       sense = analogRead(SENSOR);
       cm = 118.68 * pow(0.9966, sense);
 
