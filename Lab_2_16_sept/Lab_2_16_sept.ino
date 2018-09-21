@@ -25,24 +25,24 @@ void setup() {
   pan_servo.attach(PAN);
   tilt_servo.attach(TILT);
 
-  pan_init = 93-45;
+  pan_init = 93-25;
   pan_pos = pan_init;
   pan_servo.write(pan_init);
 
-  tilt_init = 93-45;
+  tilt_init = 93-25;
   tilt_pos = tilt_init;
   tilt_servo.write(tilt_init);
 }
 
 void loop() {
-  if (pan_pos <= pan_init + 75){
-    pan_pos += 5;
+  if (pan_pos <= pan_init + 50){
+    pan_pos += 1;
     pan_servo.write(pan_pos);
-    delay(500);
+    delay(200);
 
-    for(tilt_pos = tilt_init+5; tilt_pos <= tilt_init +75; tilt_pos += 5){
+    for(tilt_pos = tilt_init+1; tilt_pos <= tilt_init +45; tilt_pos += 1){
       tilt_servo.write(tilt_pos);
-      delay(500);
+      delay(200);
       sense = analogRead(SENSOR);
       cm = 118.68 * pow(0.9966, sense);
 
