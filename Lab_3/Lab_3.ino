@@ -7,6 +7,12 @@
 #define LEFT_SENSOR A0
 #define RIGHT_SENSOR A1
 
+// Defining variables
+String speed = "medium";
+String status = "stop";
+int left_ir = 0;
+int right_ir = 0;
+int default_speed = 150;
 
 // Creating motor object
 Adafruit_MotorShield AFMS = Adafruit_MotorShield();
@@ -15,24 +21,66 @@ Adafruit_MotorShield AFMS = Adafruit_MotorShield();
 Adafruit_DCMotor *left_motor = AFMS.getMotor(4);
 Adafruit_DCMotor *right_motor = AFMS.getMotor(3);
 
+
 void setup() {
   analogReference(DEFAULT);
 
   Serial.begin(115200);
   AFMS.begin();
 
+  // Serial.println("Set the speed for robot (fast, medium, slow):");
+  // while (Serial.available()==0) {
+  //
+  //
+  // }
+  // speed = Serial.readString();
 
 }
 
 void loop() {
-  int left_ir = analogRead(LEFT_SENSOR);
-  int right_ir = analogRead(RIGHT_SENSOR);
+  if (Serial.available() > 0) {
+    Serial.println(Serial.readString());
+    if (Serial.readString() == "fast") {
+      speed = "fast";
+    }
+    if (Serial.readString() == "slow") {
+      speed = "slow";
+    }
+    if (Serial.readString() == "medium") {
+      speed = "medium";
+    }
+    if (Serial.readString() == "start") {
+      status = "start";
+    }
+    if (Serial.readString() == "stop") {
+      speed = "stop";
+    }
+  }
 
-  left_motor -> setSpeed((left_ir/right_ir)*500);
-  right_motor -> setSpeed((right_ir/left_ir)*500);
+  left_ir = analogRead(LEFT_SENSOR);
+  right_ir = analogRead(RIGHT_SENSOR);
 
-  left_motor -> run(FORWARD);
-  right_motor -> run(FORWARD);
+  if (speed == "fast") {
+    left_motor -> setSpeed((left_ir/right_ir)*255);
+    right_motor -> setSpeed((right_ir/left_ir)*255);
+  }
+  else if (speed == "medium") {
+    left_motor -> setSpeed((left_ir/right_ir)*150);
+    right_motor -> setSpeed((right_ir/left_ir)*150);
+  }
+  else if (speed == "slow"){
+    left_motor -> setSpeed((left_ir/right_ir)*80);
+    right_motor -> setSpeed((right_ir/left_ir)*80);
+  }
 
+  // Serial.println("Enter \"start\" to run the robot and \"stop\" to stop it:");
 
+  if (status == "start") {
+      left_motor -> run(FORWARD);
+      right_motor -> run(FORWARD);
+  }
+  else if (status == "stop") {
+    left_motor -> run(RELEASE);
+    right_motor -> run(RELEASE);
+  }
 }
