@@ -1,3 +1,5 @@
+#include <Keyboard.h>
+
 // Include libraries
 #include <Wire.h>
 #include <Adafruit_MotorShield.h>
@@ -13,6 +15,7 @@ String status = "stop";
 int left_ir = 0;
 int right_ir = 0;
 int default_speed = 150;
+String input = "";
 
 // Creating motor object
 Adafruit_MotorShield AFMS = Adafruit_MotorShield();
@@ -39,8 +42,11 @@ void setup() {
 
 void loop() {
   if (Serial.available() > 0) {
-    Serial.println(Serial.readString());
-    if (Serial.readString() == "fast") {
+    input = Serial.readString();
+    // Serial.println(Serial.readString());
+    Serial.println(input.substring(0,1));
+    if (input.substring(0,1) == "fa") {
+      Serial.println(input.substring(0,1));
       speed = "fast";
     }
     if (Serial.readString() == "slow") {
