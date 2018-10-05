@@ -1,11 +1,11 @@
 import serial
 
-arduinoComPort = '/dev/ttyACM0'
+arduinoComPort = '/dev/ttyUSB0'
 
 baudRate = 115200
 serialPort = serial.Serial(arduinoComPort, baudRate, timeout=1)
 
-t = []
+time = []
 left_sensor = []
 right_sensor = []
 left_motor = []
@@ -22,7 +22,7 @@ while True:
     data = lineOfData.split(',')
 
     if len(data) == 6:
-        t.append(float(data[0]))
+        time.append(float(data[0]))
         left_sensor.append(float(data[1]))
         right_sensor.append(int(data[2]))
         left_motor.append(int(data[3]))
@@ -30,9 +30,9 @@ while True:
         if(int(data[5]) == 1):
             break
 
-speeds = open('data/sphere_coords_A.txt', 'w')
+speeds = open('data/test_data.txt', 'w')
 
-speeds.write(str(t), '\n')
+speeds.write(str(time) + '\n')
 speeds.write(str(left_sensor) + '\n')
 speeds.write(str(right_sensor) + '\n')
 speeds.write(str(left_motor) + '\n')

@@ -28,65 +28,63 @@ Adafruit_DCMotor *right_motor = AFMS.getMotor(3);
 void setup() {
   analogReference(DEFAULT);
 
-  Serial.begin(115200);
-  AFMS.begin();
-
-  // Serial.println("Set the speed for robot (fast, medium, slow):");
-  // while (Serial.available()==0) {
-  //
-  //
-  // }
-  // speed = Serial.readString();
-
+  Serial.begin(115200);   // set Baud rate
+  AFMS.begin();   // start powering the motorshield
 }
 
 void loop() {
-  if (Serial.available() > 0) {
-    input = Serial.readString();
-    // Serial.println(Serial.readString());
-    Serial.println(input.substring(0,1));
-    if (input.substring(0,1) == "fa") {
-      Serial.println(input.substring(0,1));
-      speed = "fast";
-    }
-    if (Serial.readString() == "slow") {
-      speed = "slow";
-    }
-    if (Serial.readString() == "medium") {
-      speed = "medium";
-    }
-    if (Serial.readString() == "start") {
-      status = "start";
-    }
-    if (Serial.readString() == "stop") {
-      speed = "stop";
-    }
-  }
-
   left_ir = analogRead(LEFT_SENSOR);
   right_ir = analogRead(RIGHT_SENSOR);
 
+  // conditions to check Serial input
+  if (Serial.available() > 0) {
+    input = Serial.readString();
+    if (input.substring(0,-1) == "fast") {
+      speed = "fast";
+    }
+    if (input.substring(0,-1) == "slow") {
+      speed = "slow";
+    }
+    if (input.substring(0,-1) == "medium") {
+      speed = "medium";
+    }
+    if (input.substring(0,-1) == "start") {
+      status = "start";
+    }
+    if (input.substring(0,-1) == "stop") {
+      status = "stop";
+    }
+  }
+
+  // conditions to set speed
   if (speed == "fast") {
-    left_motor -> setSpeed((left_ir/right_ir)*255);
-    right_motor -> setSpeed((right_ir/left_ir)*255);
+    left_motor -> setSpeed((left_ir/right_ir)*120);
+    right_motor -> setSpeed((right_ir/left_ir)*120);
   }
-  else if (speed == "medium") {
-    left_motor -> setSpeed((left_ir/right_ir)*150);
-    right_motor -> setSpeed((right_ir/left_ir)*150);
-  }
-  else if (speed == "slow"){
+  else if (speed == "slow") {
     left_motor -> setSpeed((left_ir/right_ir)*80);
     right_motor -> setSpeed((right_ir/left_ir)*80);
   }
+  else if (speed == "medium") {
+    left_motor -> setSpeed((left_ir/right_ir)*60);
+    right_motor -> setSpeed((right_ir/left_ir)*60);
+  }
+  else {
+    Serial.println("Error occurred while setting speed..");
+  }
 
-  // Serial.println("Enter \"start\" to run the robot and \"stop\" to stop it:");
-
+  // conditions to set status
   if (status == "start") {
-      left_motor -> run(FORWARD);
-      right_motor -> run(FORWARD);
+    left_motor -> run(FORWARD);
+    right_motor -> run(FORWARD);
   }
   else if (status == "stop") {
     left_motor -> run(RELEASE);
     right_motor -> run(RELEASE);
   }
+  else {
+    Serial.println("Error occurred while setting status..");
+  }
+
+  delay(50);
 }
